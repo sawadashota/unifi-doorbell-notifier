@@ -1,0 +1,24 @@
+{
+  "imports": {
+    "/index.html": {
+      "entry": [
+        "/_dist_/index.js"
+      ],
+      "css": [
+        "/favicon.ico"
+      ],
+      "js": [
+        "/_dist_/App.js",
+        "/_dist_/index.css.proxy.js",
+        "/_dist_/index.js",
+        "/_dist_/reset.css.proxy.js",
+        "/_snowpack/pkg/common/preact.module-87ab60fc.js",
+        "/_snowpack/pkg/preact-async-route.js",
+        "/_snowpack/pkg/preact-router.js",
+        "/_snowpack/pkg/preact.js",
+        "/_snowpack/pkg/preact/devtools.js"
+      ]
+    }
+  },
+  "generated": {}
+}

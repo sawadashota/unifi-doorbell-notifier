@@ -1,0 +1,1 @@
+import{h as o}from"../_snowpack/pkg/preact.js";import t from"../_snowpack/pkg/preact-router.js";import r from"../_snowpack/pkg/preact-async-route.js";const n=()=>o(t,null,o(r,{path:"/ringing/:doorbell_id",getComponent:()=>import("./Ringing.js").then(p=>p.Ringing)}));export default n;

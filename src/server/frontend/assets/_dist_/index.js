@@ -1,0 +1,1 @@
+import{h as p,render as r}from"../_snowpack/pkg/preact.js";import"../_snowpack/pkg/preact/devtools.js";import t from"./App.js";import"./reset.css.proxy.js";import"./index.css.proxy.js";const o=document.getElementById("root");o!==null&&r(p(t,null),o);
