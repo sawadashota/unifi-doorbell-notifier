@@ -5,13 +5,13 @@ use crate::listener::listen;
 use crate::server::{api, frontend};
 use actix_web::middleware::{Compress, Logger};
 use actix_web::rt::{spawn, System};
-use actix_web::{web, App, HttpServer, http};
+use actix_web::{web, App, HttpServer};
 use anyhow::Result;
 use log::LevelFilter;
 use std::path::PathBuf;
 use std::sync::{mpsc, Arc};
 use std::thread;
-use actix_cors::Cors;
+// use actix_cors::Cors;
 use structopt::StructOpt;
 
 /// Serve application
@@ -52,12 +52,12 @@ impl Cmd {
                 App::new()
                     .app_data(app_cfg.clone())
                     .app_data(app_client.clone())
-                    .wrap(Cors::default()
-                        .send_wildcard()
-                        .allowed_methods(vec!["*"])
-                        .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-                        .allowed_header(http::header::CONTENT_TYPE)
-                        .max_age(3600))
+                    // .wrap(Cors::default()
+                    //     .send_wildcard()
+                    //     .allowed_methods(vec!["*"])
+                    //     .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+                    //     .allowed_header(http::header::CONTENT_TYPE)
+                    //     .max_age(3600))
                     .wrap(Compress::default())
                     .wrap(Logger::exclude_regex(Logger::default(), r".+\.(js|css|ico)"))
                     .service(api::wellknown_service())
