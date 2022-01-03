@@ -4,22 +4,22 @@ use serde_json::Value;
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct BootstrapResponse {
-    pub auth_user_id: String,
-    pub access_key: String,
+    // pub auth_user_id: String,
+    // pub access_key: String,
     pub cameras: Vec<Camera>,
-    pub users: Vec<User>,
-    pub groups: Vec<Group>,
-    pub liveviews: Vec<Liveview>,
-    pub nvr: Nvr,
-    #[serde(rename = "legacyUFVs")]
-    pub legacy_ufvs: Vec<Value>,
-    pub last_update_id: String,
-    pub viewers: Vec<Value>,
-    pub displays: Vec<Value>,
-    pub lights: Vec<Value>,
-    pub bridges: Vec<Value>,
-    pub sensors: Vec<Value>,
-    pub doorlocks: Vec<Value>,
+    // pub users: Vec<User>,
+    // pub groups: Vec<Group>,
+    // pub liveviews: Vec<Liveview>,
+    // pub nvr: Nvr,
+    // #[serde(rename = "legacyUFVs")]
+    // pub legacy_ufvs: Vec<Value>,
+    // pub last_update_id: String,
+    // pub viewers: Vec<Value>,
+    // pub displays: Vec<Value>,
+    // pub lights: Vec<Value>,
+    // pub bridges: Vec<Value>,
+    // pub sensors: Vec<Value>,
+    // pub doorlocks: Vec<Value>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
