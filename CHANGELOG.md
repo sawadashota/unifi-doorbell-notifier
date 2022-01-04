@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.0.4](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.3...v0.0.4) (2022-01-04)
+
+
+### Bug Fixes
+
+* Use publish as artifact release trigger ([d1abe21](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/d1abe215dcb2f60eaa727e86ca3fb01c86cd9524))
+
 ### [0.0.3](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.2...v0.0.3) (2022-01-04)
 
 
