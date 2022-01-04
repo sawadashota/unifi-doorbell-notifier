@@ -59,14 +59,16 @@ impl Listener {
                 let mut state = self.state.lock().unwrap();
 
                 let last_ring = Utc.timestamp_millis(doorbell.last_ring.unwrap_or(0).clone());
-                let _ = *state.entry(doorbell.id.clone()).or_insert(last_ring);
+                *state.entry(doorbell.id.clone()).or_insert(last_ring) = last_ring;
                 let url = format!(
                     "http://localhost:{}/ringing/{}",
                     self.cfg.server.port, doorbell.id
                 );
 
-                if webbrowser::open(url.as_str()).is_err() {
-                    error!("failed to open browser");
+                if self.cfg.open_browser {
+                    if webbrowser::open(url.as_str()).is_err() {
+                        error!("failed to open browser");
+                    }
                 }
             });
         Ok(())
