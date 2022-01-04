@@ -4,6 +4,8 @@ on:
       - released
       - prereleased
 
+name: release-artifact
+
 jobs:
   release:
     name: release ${{ matrix.target }}
