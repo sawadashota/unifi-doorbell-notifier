@@ -49,7 +49,7 @@ impl Configuration {
 
         let mut cfg = Config::default();
         let default_port: u16 = pick_unused_port().expect("could not find free port");
-        cfg.set_default("log.level", "error")
+        cfg.set_default("log.level", "info")
             .unwrap()
             .set_default("server.worker", 3)
             .unwrap()
@@ -75,7 +75,7 @@ mod tests {
 
         assert_eq!(
             Log {
-                level: "error".to_string(),
+                level: "info".to_string(),
             },
             actual.log
         );
@@ -103,7 +103,7 @@ mod tests {
         let actual = Configuration::from_path(&PathBuf::from(
             "src/config/testdata/valid_full_options.yaml",
         ))
-        .expect("valid_full_options.yaml should be deserialized");
+            .expect("valid_full_options.yaml should be deserialized");
         let expected = Configuration {
             log: Log {
                 level: "info".to_string(),
