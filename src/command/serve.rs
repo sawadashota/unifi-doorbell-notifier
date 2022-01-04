@@ -89,7 +89,8 @@ fn init_log(c: &Configuration) {
         "info" => LevelFilter::Info,
         "warn" => LevelFilter::Warn,
         "error" => LevelFilter::Error,
-        _ => LevelFilter::Off,
+        "off" => LevelFilter::Off,
+        _ => LevelFilter::Info,
     };
     let _ = env_logger::builder().filter_level(level).try_init();
 }
