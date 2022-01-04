@@ -11,6 +11,7 @@ pub struct Configuration {
     pub unifi: Unifi,
     pub boot_option: Option<BootOption>,
     pub message: Message,
+    pub open_browser: bool,
 }
 
 #[derive(Debug, Deserialize, PartialEq, Clone)]
@@ -50,6 +51,8 @@ impl Configuration {
         let mut cfg = Config::default();
         let default_port: u16 = pick_unused_port().expect("could not find free port");
         cfg.set_default("log.level", "info")
+            .unwrap()
+            .set_default("open_browser", true)
             .unwrap()
             .set_default("server.worker", 3)
             .unwrap()
@@ -96,6 +99,7 @@ mod tests {
             },
             actual.message
         );
+        assert_eq!(true, actual.open_browser);
     }
 
     #[test]
@@ -123,6 +127,7 @@ mod tests {
             message: Message {
                 templates: vec!["I'm on my way".to_string(), "I'm busy now".to_string()],
             },
+            open_browser: false,
         };
         assert_eq!(expected, actual)
     }

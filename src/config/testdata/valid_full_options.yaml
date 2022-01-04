@@ -13,3 +13,4 @@ message:
   templates:
     - I'm on my way
     - I'm busy now
+open_browser: false
