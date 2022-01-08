@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.0](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.6...v0.1.0) (2022-01-08)
+
+
+### Features
+
+* Mac address assertion boot option ([#13](https://www.github.com/sawadashota/unifi-doorbell-notifier/issues/13)) ([42d5f05](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/42d5f050054ead6d9edf371fab01453d15f30918))
+
 ### [0.0.6](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.5...v0.0.6) (2022-01-08)
 
 
