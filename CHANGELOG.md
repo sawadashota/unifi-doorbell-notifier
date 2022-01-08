@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.0.6](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.5...v0.0.6) (2022-01-08)
+
+
+### Bug Fixes
+
+* Release credential ([ece2273](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/ece227305fff7e9cabefd1377f3952eb6e3db0e7))
+
 ### [0.0.5](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.4...v0.0.5) (2022-01-08)
 
 
