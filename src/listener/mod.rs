@@ -1,24 +1,46 @@
 use crate::client::ApiClient;
 use crate::config::Configuration;
-use anyhow::{Result};
+use anyhow::Result;
 use chan::chan_select;
 use chrono::{DateTime, TimeZone, Utc};
+use mac_address::{get_mac_address, MacAddress};
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
+use std::thread::sleep;
 use std::time::Duration;
-use mac_address::{get_mac_address, MacAddress};
+use thiserror::Error;
 
 pub async fn listen(
     cfg: Arc<Configuration>,
     client: Arc<ApiClient>,
     quit: chan::Receiver<()>,
 ) -> () {
-    let listener = Listener::init(cfg, client.clone()).unwrap();
-    listener.run(quit).await
+    loop {
+        match Listener::init(cfg.clone(), client.clone()) {
+            Ok(lis) => match lis.run(quit.borrow()) {
+                Ok(_) => return (),
+                Err(err) => {
+                    warn!("an error occurred during listening: {}", err);
+                }
+            },
+            Err(err) => {
+                warn!("an error occurred during initializing: {}", err);
+            }
+        };
+        info!("try again after 1 minute");
+        sleep(Duration::from_secs(60));
+    }
 }
 
 type State = HashMap<String, DateTime<Utc>>;
+
+#[derive(Debug, Error)]
+enum ListenerError {
+    #[error("mac address is not same with configured")]
+    MacAddressError,
+}
 
 struct Listener {
     cfg: Arc<Configuration>,
@@ -28,9 +50,17 @@ struct Listener {
 
 impl Listener {
     fn init(cfg: Arc<Configuration>, client: Arc<ApiClient>) -> Result<Self> {
+        if !Self::check_mac_address(cfg.boot_option.mac_address.as_str()) {
+            debug!("skip polling because current mac address is not same with configured");
+            return Err(ListenerError::MacAddressError.into());
+        }
+
         let mut state = State::new();
         for doorbell in client.get_doorbells()? {
-            info!("listening doorbell {} (id: {}, mac: {})",  doorbell.name, doorbell.id, doorbell.mac);
+            info!(
+                "listening doorbell {} (id: {}, mac: {})",
+                doorbell.name, doorbell.id, doorbell.mac
+            );
             state.insert(
                 doorbell.id,
                 Utc.timestamp_millis(doorbell.last_ring.unwrap_or(0)),
@@ -44,9 +74,9 @@ impl Listener {
     }
 
     fn poll(&self) -> Result<()> {
-        if !self.check_mac_address() {
+        if !Self::check_mac_address(self.cfg.boot_option.mac_address.as_str()) {
             debug!("skip polling because current mac address is not same with configured");
-            return Ok(());
+            return Err(ListenerError::MacAddressError.into());
         }
         self.client
             .get_doorbells()?
@@ -80,11 +110,11 @@ impl Listener {
         Ok(())
     }
 
-    fn check_mac_address(&self) -> bool {
-        if self.cfg.boot_option.mac_address.is_empty() {
-           return true;
+    fn check_mac_address(requested: &str) -> bool {
+        if requested.is_empty() {
+            return true;
         }
-        let cfg_mac_address = MacAddress::from_str(&*self.cfg.boot_option.mac_address);
+        let cfg_mac_address = MacAddress::from_str(&requested);
         if cfg_mac_address.is_err() {
             return false;
         }
@@ -98,23 +128,23 @@ impl Listener {
         actual.eq(&cfg_mac_address.unwrap())
     }
 
-    async fn run(&self, quit: chan::Receiver<()>) -> () {
+    fn run(&self, quit: &chan::Receiver<()>) -> Result<()> {
         info!("waiting chime...");
 
         let tick = chan::tick(Duration::from_secs(1));
         loop {
             chan_select! {
                 quit.recv() => {
-                    break
+                    info!("finished listening");
+                    return Ok(())
                 },
                 tick.recv() => {
-                    if let Err(err) = self.poll() {
-                        error!("failed polling: {}", err);
+                    match self.poll() {
+                        Ok(_) => continue,
+                        Err(err) => err,
                     }
                 },
             }
         }
-        info!("finished listening");
-        ()
     }
 }

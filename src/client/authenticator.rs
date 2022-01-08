@@ -1,6 +1,6 @@
 use crate::client::endpoint::Endpoint;
 use crate::config::Unifi;
-use anyhow::{anyhow, Result};
+use anyhow::{bail, ensure, Result};
 use chrono::{DateTime, Duration, TimeZone, Utc};
 use jsonwebtoken::dangerous_insecure_decode;
 use reqwest::cookie::Cookie;
@@ -96,13 +96,12 @@ impl Authenticator {
                 remember_me: true,
             })
             .send()?;
-        if res.status() != StatusCode::OK {
-            return Err(anyhow!(format!(
-                "failed to authenticate. status: {} err: {}",
-                res.status(),
-                res.text()?
-            )));
-        }
+        ensure!(
+            res.status() == StatusCode::OK,
+            "failed to authenticate. status: {} err: {}",
+            res.status(),
+            res.text()?
+        );
 
         let token = res.cookies().find(|cookie| cookie.name() == "TOKEN");
         match token {
@@ -112,7 +111,7 @@ impl Authenticator {
                 debug!("session will expire at: {:#?}", cookie.claim.expired_at());
                 Ok(())
             }
-            None => Err(anyhow!("not found TOKEN at response cookie")),
+            None => bail!("not found TOKEN at response cookie"),
         }
     }
 

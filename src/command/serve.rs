@@ -59,15 +59,18 @@ impl Cmd {
                     //     .allowed_header(http::header::CONTENT_TYPE)
                     //     .max_age(3600))
                     .wrap(Compress::default())
-                    .wrap(Logger::exclude_regex(Logger::default(), r".+\.(js|css|ico)"))
+                    .wrap(Logger::exclude_regex(
+                        Logger::default(),
+                        r".+\.(js|css|ico)",
+                    ))
                     .service(api::wellknown_service())
                     .service(api::service())
                     .service(frontend::spa)
             })
-                .bind(format!("0.0.0.0:{}", cfg.server.port))?
-                .workers(cfg.server.worker)
-                .shutdown_timeout(10)
-                .run();
+            .bind(format!("0.0.0.0:{}", cfg.server.port))?
+            .workers(cfg.server.worker)
+            .shutdown_timeout(10)
+            .run();
 
             let _ = srv_tx.send(server);
             sys.run()

@@ -14,8 +14,7 @@ pub fn service() -> Scope {
 }
 
 pub fn wellknown_service() -> Scope {
-    web::scope("/.well-known")
-        .service(wellknown_configuration)
+    web::scope("/.well-known").service(wellknown_configuration)
 }
 
 #[derive(Serialize, Debug)]

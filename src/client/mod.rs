@@ -11,7 +11,7 @@ use crate::client::types_image::ImageResponse;
 use crate::client::types_update_camera::UpdateCameraRequest;
 use crate::config::Unifi;
 use actix_web::http::HeaderValue;
-use anyhow::{anyhow, Result};
+use anyhow::{ensure, Result};
 use chrono::Duration;
 use reqwest::blocking::{Client, RequestBuilder, Response};
 use reqwest::StatusCode;
@@ -82,13 +82,12 @@ impl ApiClient {
             )
             .json(&UpdateCameraRequest::update_message(message, duration));
         let res = self.send_with_session(client)?;
-        if res.status() != StatusCode::OK {
-            return Err(anyhow!(format!(
-                "failed to update camera. status: {} err: {}",
-                res.status(),
-                res.text()?
-            )));
-        }
+        ensure!(
+            res.status() == StatusCode::OK,
+            "failed to update camera. status: {} err: {}",
+            res.status(),
+            res.text()?
+        );
         Ok(())
     }
 
