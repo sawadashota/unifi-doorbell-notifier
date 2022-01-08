@@ -9,7 +9,7 @@ pub struct Configuration {
     pub log: Log,
     pub server: Server,
     pub unifi: Unifi,
-    pub boot_option: Option<BootOption>,
+    pub boot_option: BootOption,
     pub message: Message,
     pub open_browser: bool,
 }
@@ -58,6 +58,8 @@ impl Configuration {
             .unwrap()
             .set_default("server.port", default_port.to_string())
             .unwrap()
+            .set_default("boot_option.mac_address", "")
+            .unwrap()
             .merge(File::from(path.as_path()))
             .unwrap()
             .merge(Environment::default())
@@ -92,7 +94,7 @@ mod tests {
             },
             actual.unifi
         );
-        assert_eq!(None, actual.boot_option);
+        assert_eq!(BootOption{ mac_address: "".to_string() }, actual.boot_option);
         assert_eq!(
             Message {
                 templates: vec!["I'm on my way".to_string(), "I'm busy now".to_string()],
@@ -121,9 +123,9 @@ mod tests {
                 username: "username".to_string(),
                 password: "password".to_string(),
             },
-            boot_option: Some(BootOption {
+            boot_option: BootOption {
                 mac_address: "00:00:00:00:00:00".to_string(),
-            }),
+            },
             message: Message {
                 templates: vec!["I'm on my way".to_string(), "I'm busy now".to_string()],
             },
