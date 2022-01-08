@@ -1,11 +1,13 @@
 use crate::client::ApiClient;
 use crate::config::Configuration;
-use anyhow::Result;
+use anyhow::{Result};
 use chan::chan_select;
 use chrono::{DateTime, TimeZone, Utc};
 use std::collections::HashMap;
+use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
+use mac_address::{get_mac_address, MacAddress};
 
 pub async fn listen(
     cfg: Arc<Configuration>,
@@ -42,6 +44,10 @@ impl Listener {
     }
 
     fn poll(&self) -> Result<()> {
+        if !self.check_mac_address() {
+            debug!("skip polling because current mac address is not same with configured");
+            return Ok(());
+        }
         self.client
             .get_doorbells()?
             .into_iter()
@@ -72,6 +78,24 @@ impl Listener {
                 }
             });
         Ok(())
+    }
+
+    fn check_mac_address(&self) -> bool {
+        if self.cfg.boot_option.mac_address.is_empty() {
+           return true;
+        }
+        let cfg_mac_address = MacAddress::from_str(&*self.cfg.boot_option.mac_address);
+        if cfg_mac_address.is_err() {
+            return false;
+        }
+        let res = get_mac_address();
+        if res.is_err() {
+            return false;
+        }
+
+        let actual = res.unwrap().unwrap_or(MacAddress::default());
+        debug!("current mac address is {}", actual);
+        actual.eq(&cfg_mac_address.unwrap())
     }
 
     async fn run(&self, quit: chan::Receiver<()>) -> () {
