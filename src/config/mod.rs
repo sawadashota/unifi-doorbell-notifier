@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{ensure, Result};
 use config::{Config, Environment, File};
 use portpicker::pick_unused_port;
 use serde::Deserialize;
@@ -44,9 +44,7 @@ pub struct Message {
 
 impl Configuration {
     pub fn from_path(path: &PathBuf) -> Result<Configuration> {
-        if !path.exists() {
-            return Err(anyhow::anyhow!("not found config file"));
-        }
+        ensure!(path.exists(), "not found config file");
 
         let mut cfg = Config::default();
         let default_port: u16 = pick_unused_port().expect("could not find free port");
@@ -94,7 +92,12 @@ mod tests {
             },
             actual.unifi
         );
-        assert_eq!(BootOption{ mac_address: "".to_string() }, actual.boot_option);
+        assert_eq!(
+            BootOption {
+                mac_address: "".to_string()
+            },
+            actual.boot_option
+        );
         assert_eq!(
             Message {
                 templates: vec!["I'm on my way".to_string(), "I'm busy now".to_string()],
@@ -109,7 +112,7 @@ mod tests {
         let actual = Configuration::from_path(&PathBuf::from(
             "src/config/testdata/valid_full_options.yaml",
         ))
-            .expect("valid_full_options.yaml should be deserialized");
+        .expect("valid_full_options.yaml should be deserialized");
         let expected = Configuration {
             log: Log {
                 level: "info".to_string(),

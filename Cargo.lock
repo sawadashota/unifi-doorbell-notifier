@@ -2809,6 +2809,7 @@ dependencies = [
  "serde 1.0.132",
  "serde_json",
  "structopt",
+ "thiserror",
  "webbrowser",
 ]
 

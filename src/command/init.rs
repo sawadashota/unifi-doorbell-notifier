@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{ensure, Result};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -31,9 +31,7 @@ message:
 impl Cmd {
     pub fn execute(&self) -> Result<()> {
         let config_path = config_path::get(self.config.clone());
-        if config_path.exists() {
-            return Err(anyhow::anyhow!("config file is already exists"));
-        }
+        ensure!(!config_path.exists(), "config file is already exists");
 
         let dir = config_path.parent().unwrap();
         if !dir.exists() {
