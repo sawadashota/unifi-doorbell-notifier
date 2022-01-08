@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.1](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.0...v0.1.1) (2022-01-08)
+
+
+### Bug Fixes
+
+* Boot option ([#15](https://www.github.com/sawadashota/unifi-doorbell-notifier/issues/15)) ([7c3b549](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/7c3b5499cf9bb0f6a72f944a58b0928affa584e3))
+
 ## [0.1.0](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.6...v0.1.0) (2022-01-08)
 
 
