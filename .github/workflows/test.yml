@@ -1,5 +1,8 @@
 on:
-  - push
+  push:
+    paths:
+      - 'src/**'
+      - 'Cargo.lock'
 
 name: test
 
