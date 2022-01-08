@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.0.5](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.4...v0.0.5) (2022-01-08)
+
+
+### Bug Fixes
+
+* Drop windowns build ([4856f5a](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/4856f5ae85fb1d1f494ad800b74d565a34b39f9d))
+
 ### [0.0.4](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.0.3...v0.0.4) (2022-01-04)
 
 
