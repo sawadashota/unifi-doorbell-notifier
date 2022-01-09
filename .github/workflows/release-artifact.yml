@@ -6,7 +6,7 @@ on:
 name: release-artifact
 
 jobs:
-  release:
+  github:
     name: release ${{ matrix.target }}
     runs-on: ubuntu-latest
     strategy:
@@ -26,3 +26,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RUSTTARGET: ${{ matrix.target }}
           ARCHIVE_TYPES: ${{ matrix.archive }}
+
+  homebrew-fomula:
+    name: Update Homebrew Formula
+    needs:
+      - github
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Homebrew Formula
+        uses: izumin5210/action-homebrew-tap@releases/v0
+        with:
+          tap: izumin5210/homebrew-tools
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tap-token: ${{ secrets._GITHUB_TOKEN }}
