@@ -15,8 +15,8 @@ pub fn get(config: Option<PathBuf>) -> PathBuf {
 
 fn get_default() -> PathBuf {
     let base = match dirs::home_dir() {
-        Some(path) => path.join(".unifi-doorbell-chime"),
-        None => PathBuf::from("/etc/unifi-doorbell-chime"),
+        Some(path) => path.join(".unifi-doorbell-notifier"),
+        None => PathBuf::from("/etc/unifi-doorbell-notifier"),
     };
     base.join("config.yaml")
 }
