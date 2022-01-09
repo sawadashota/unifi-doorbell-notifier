@@ -4,6 +4,12 @@
 
 Notify to your PC when Doorbell rung.
 
+## Installation
+
+```
+$ brew install sawadashota/tap/unifi-doorbell-notifier
+```
+
 ## Development Guide
 
 ```
@@ -18,11 +24,11 @@ $ cargo run -- init -c tmp/config.yaml
 Run test
 
 ```
-cargo test
+$ cargo test
 ```
 
 Build frontend
 
 ```
-make web-build
+$ make web-build
 ```
