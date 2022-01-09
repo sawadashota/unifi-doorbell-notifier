@@ -18,6 +18,7 @@ jobs:
           - target: x86_64-apple-darwin
             archive: zip
     steps:
+      - run: echo "${GITHUB_REF#refs/tags/}"
       - uses: actions/checkout@master
       - name: Compile and release
         uses: rust-build/rust-build.action@latest
@@ -27,15 +28,21 @@ jobs:
           RUSTTARGET: ${{ matrix.target }}
           ARCHIVE_TYPES: ${{ matrix.archive }}
 
-  homebrew-fomula:
-    name: Update Homebrew Formula
+  homebrew:
+    name: Bump Homebrew formula
     needs:
       - github
     runs-on: ubuntu-latest
     steps:
-      - name: Update Homebrew Formula
-        uses: izumin5210/action-homebrew-tap@releases/v0
+      - name: Extract version
+        id: extract-version
+        run: |
+          printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
+      - uses: mislav/bump-homebrew-formula-action@v1
         with:
-          tap: izumin5210/homebrew-tools
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tap-token: ${{ secrets._GITHUB_TOKEN }}
+          formula-path: unifi-doorbell-notifier.rb
+          homebrew-tap: sawadashota/homebrew-tap
+          base-branch: main
+          download-url: https://github.com/sawadashota/unifi-doorbell-notifier/releases/download/${{ steps.extract-version.outputs.tag-name }}/unifi-doorbell-notifier_${{ steps.extract-version.outputs.tag-name }}_x86_64-apple-darwin.zip
+        env:
+          COMMITTER_TOKEN: ${{ secrets._GITHUB_TOKEN }}
