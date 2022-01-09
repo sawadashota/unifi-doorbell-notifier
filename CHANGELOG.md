@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.5](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.4...v0.1.5) (2022-01-09)
+
+
+### Bug Fixes
+
+* Add GNU Linux support ([fe2f2fb](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/fe2f2fb6bf2ed09a837113742466c17c7b0092ba))
+
 ### [0.1.4](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.3...v0.1.4) (2022-01-09)
 
 
