@@ -1,0 +1,53 @@
+on: push
+
+name: cross build
+jobs:
+  github:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: example
+            asset_name: unifi-doorbell-notifier-x86_64-unknown-linux-gnu
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            artifact_name: example
+            asset_name: unifi-doorbell-notifier-x86_64-unknown-linux-musl
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact_name: example
+            asset_name: unifi-doorbell-notifier-x86_64-apple-darwin
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Cross build with all features
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: build
+          args: --release --target ${{ matrix.target }} --all-features --verbose
+
+#      - name: Upload binaries to release
+#        uses: svenstaro/upload-release-action@2.1.1
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+#          asset_name: ${{ matrix.asset_name }}
+#          tag: ${{ github.ref }}
+#          overwrite: true
