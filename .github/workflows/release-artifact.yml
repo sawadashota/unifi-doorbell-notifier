@@ -3,30 +3,30 @@ on:
     types:
       - created
 
-name: release-artifact
+name: release-binary
 
 jobs:
-  github:
-    name: release ${{ matrix.target }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: x86_64-unknown-linux-musl
-            archive: tar.gz
-          - target: x86_64-apple-darwin
-            archive: zip
-    steps:
-      - run: echo "${GITHUB_REF#refs/tags/}"
-      - uses: actions/checkout@master
-      - name: Compile and release
-        uses: rust-build/rust-build.action@latest
-        timeout-minutes: 20
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RUSTTARGET: ${{ matrix.target }}
-          ARCHIVE_TYPES: ${{ matrix.archive }}
+#  linux:
+#    name: release ${{ matrix.target }}
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - target: x86_64-unknown-linux-gnu
+#            archive: tar.gz
+#          - target: x86_64-unknown-linux-musl
+#            archive: tar.gz
+#    steps:
+#      - run: echo "${GITHUB_REF#refs/tags/}"
+#      - uses: actions/checkout@master
+#      - name: Compile and release
+#        uses: rust-build/rust-build.action@latest
+#        timeout-minutes: 20
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          RUSTTARGET: ${{ matrix.target }}
+#          ARCHIVE_TYPES: ${{ matrix.archive }}
 
   darwin:
     strategy:
@@ -50,6 +50,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: |
+          sha256sum Cargo.lock | cut -d ' ' -f 1
+          ls
       - uses: actions/cache@v2
         with:
           path: |
@@ -70,30 +73,42 @@ jobs:
           command: build
           args: --release --target ${{ matrix.target }}
 
+      - name: Archive
+        run: tar caf tar.gz "target/${{ matrix.target }}/release/${{ matrix.artifact_name }} README.md LICENSE"
+      - run: sha256sum target/${{ matrix.target }}/release/${{ matrix.artifact_name }} | cut -d ' ' -f 1
+
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}
+          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}.tar.gz
           asset_name: ${{ matrix.asset_name }}
           tag: ${{ github.ref }}
           overwrite: true
-
-  homebrew:
-    name: Bump Homebrew formula
-    needs:
-      - github
-    runs-on: ubuntu-latest
-    steps:
-      - name: Extract version
-        id: extract-version
-        run: |
-          printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
-      - uses: mislav/bump-homebrew-formula-action@v1
+      - name: Upload checksum to release
+        uses: svenstaro/upload-release-action@latest
         with:
-          formula-path: unifi-doorbell-notifier.rb
-          homebrew-tap: sawadashota/homebrew-tap
-          base-branch: main
-          download-url: https://github.com/sawadashota/unifi-doorbell-notifier/releases/download/${{ steps.extract-version.outputs.tag-name }}/unifi-doorbell-notifier_${{ steps.extract-version.outputs.tag-name }}_x86_64-apple-darwin.zip
-        env:
-          COMMITTER_TOKEN: ${{ secrets._GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/release/${{ matrix.artifact_name }}.tar.gz.sha256
+          asset_name: ${{ matrix.asset_name }}.tar.gz.sha256
+          tag: ${{ github.ref }}
+          overwrite: true
+
+#  homebrew:
+#    name: Bump Homebrew formula
+#    needs:
+#      - linux
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Extract version
+#        id: extract-version
+#        run: |
+#          printf "::set-output name=%s::%s\n" tag-name "${GITHUB_REF#refs/tags/}"
+#      - uses: mislav/bump-homebrew-formula-action@v1
+#        with:
+#          formula-path: ${{ github.event.repository.name }}.rb
+#          homebrew-tap: sawadashota/homebrew-tap
+#          base-branch: main
+#          download-url: https://github.com/${{ github.repository }}/releases/download/${{ steps.extract-version.outputs.tag-name }}/unifi-doorbell-notifier_${{ steps.extract-version.outputs.tag-name }}_x86_64-apple-darwin.zip
+#        env:
+#          COMMITTER_TOKEN: ${{ secrets._GITHUB_TOKEN }}
