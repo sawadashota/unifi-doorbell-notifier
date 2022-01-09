@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.3](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.2...v0.1.3) (2022-01-09)
+
+
+### Bug Fixes
+
+* Automatic release homebrew ([12940da](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/12940da9207be8b82ba1ce574390a9f2e9a680ed))
+
 ### [0.1.2](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.1...v0.1.2) (2022-01-09)
 
 
