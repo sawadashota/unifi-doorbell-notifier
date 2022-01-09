@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          sha256sum Cargo.lock | cut -d ' ' -f 1
+          shasum -a 256 Cargo.lock | cut -d ' ' -f 1
           ls
       - uses: actions/cache@v2
         with:
@@ -75,7 +75,7 @@ jobs:
 
       - name: Archive
         run: tar caf tar.gz "target/${{ matrix.target }}/release/${{ matrix.artifact_name }} README.md LICENSE"
-      - run: sha256sum target/${{ matrix.target }}/release/${{ matrix.artifact_name }} | cut -d ' ' -f 1
+      - run: shasum -a 256 target/${{ matrix.target }}/release/${{ matrix.artifact_name }} | cut -d ' ' -f 1
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@latest
