@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.4](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.3...v0.1.4) (2022-01-09)
+
+
+### Bug Fixes
+
+* Use mislav/bump-homebrew-formula-action ([034902c](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/034902c0d17138f363c3cf8f7e05fe499807afa6))
+
 ### [0.1.3](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.2...v0.1.3) (2022-01-09)
 
 
