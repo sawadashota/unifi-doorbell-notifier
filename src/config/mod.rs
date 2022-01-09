@@ -34,7 +34,7 @@ pub struct Unifi {
 
 #[derive(Debug, Deserialize, PartialEq, Clone)]
 pub struct BootOption {
-    pub mac_address: String,
+    pub mac_address: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, PartialEq, Clone)]
@@ -55,8 +55,6 @@ impl Configuration {
             .set_default("server.worker", 3)
             .unwrap()
             .set_default("server.port", default_port.to_string())
-            .unwrap()
-            .set_default("boot_option.mac_address", "")
             .unwrap()
             .merge(File::from(path.as_path()))
             .unwrap()
@@ -94,7 +92,7 @@ mod tests {
         );
         assert_eq!(
             BootOption {
-                mac_address: "".to_string()
+                mac_address: vec!["00:00:00:00:00:00".to_string()],
             },
             actual.boot_option
         );
@@ -127,7 +125,7 @@ mod tests {
                 password: "password".to_string(),
             },
             boot_option: BootOption {
-                mac_address: "00:00:00:00:00:00".to_string(),
+                mac_address: vec!["00:00:00:00:00:00".to_string()],
             },
             message: Message {
                 templates: vec!["I'm on my way".to_string(), "I'm busy now".to_string()],

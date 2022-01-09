@@ -11,7 +11,6 @@ use log::LevelFilter;
 use std::path::PathBuf;
 use std::sync::{mpsc, Arc};
 use std::thread;
-// use actix_cors::Cors;
 use structopt::StructOpt;
 
 /// Serve application
@@ -52,12 +51,6 @@ impl Cmd {
                 App::new()
                     .app_data(app_cfg.clone())
                     .app_data(app_client.clone())
-                    // .wrap(Cors::default()
-                    //     .send_wildcard()
-                    //     .allowed_methods(vec!["*"])
-                    //     .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
-                    //     .allowed_header(http::header::CONTENT_TYPE)
-                    //     .max_age(3600))
                     .wrap(Compress::default())
                     .wrap(Logger::exclude_regex(
                         Logger::default(),

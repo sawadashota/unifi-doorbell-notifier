@@ -1,12 +1,12 @@
+mod mac_address;
+
 use crate::client::ApiClient;
 use crate::config::Configuration;
 use anyhow::Result;
 use chan::chan_select;
 use chrono::{DateTime, TimeZone, Utc};
-use mac_address::{get_mac_address, MacAddress};
 use std::borrow::Borrow;
 use std::collections::HashMap;
-use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::Duration;
@@ -50,8 +50,7 @@ struct Listener {
 
 impl Listener {
     fn init(cfg: Arc<Configuration>, client: Arc<ApiClient>) -> Result<Self> {
-        if !Self::check_mac_address(cfg.boot_option.mac_address.as_str()) {
-            debug!("skip polling because current mac address is not same with configured");
+        if !mac_address::check(cfg.boot_option.mac_address.borrow()) {
             return Err(ListenerError::MacAddressError.into());
         }
 
@@ -74,8 +73,7 @@ impl Listener {
     }
 
     fn poll(&self) -> Result<()> {
-        if !Self::check_mac_address(self.cfg.boot_option.mac_address.as_str()) {
-            debug!("skip polling because current mac address is not same with configured");
+        if !mac_address::check(self.cfg.boot_option.mac_address.borrow()) {
             return Err(ListenerError::MacAddressError.into());
         }
         self.client
@@ -108,24 +106,6 @@ impl Listener {
                 }
             });
         Ok(())
-    }
-
-    fn check_mac_address(requested: &str) -> bool {
-        if requested.is_empty() {
-            return true;
-        }
-        let cfg_mac_address = MacAddress::from_str(&requested);
-        if cfg_mac_address.is_err() {
-            return false;
-        }
-        let res = get_mac_address();
-        if res.is_err() {
-            return false;
-        }
-
-        let actual = res.unwrap().unwrap_or(MacAddress::default());
-        debug!("current mac address is {}", actual);
-        actual.eq(&cfg_mac_address.unwrap())
     }
 
     fn run(&self, quit: &chan::Receiver<()>) -> Result<()> {
