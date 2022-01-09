@@ -1,6 +1,6 @@
 on: push
 
-name: cross build
+name: build
 jobs:
   github:
     strategy:
@@ -35,13 +35,14 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
-      - name: Cross build with all features
+      - name: Cross Build
         uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: build
-          args: --release --target ${{ matrix.target }} --all-features --verbose
+          args: --release --target ${{ matrix.target }}
 
 #      - name: Upload binaries to release
 #        uses: svenstaro/upload-release-action@2.1.1
