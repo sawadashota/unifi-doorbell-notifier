@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.2](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.1...v0.1.2) (2022-01-09)
+
+
+### Bug Fixes
+
+* Multiple mac address acceptable ([#17](https://www.github.com/sawadashota/unifi-doorbell-notifier/issues/17)) ([e6b9339](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/e6b9339278a3ea5feadb71e9075a3f56e4671f43))
+
 ### [0.1.1](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.0...v0.1.1) (2022-01-08)
 
 
