@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.6](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.5...v0.1.6) (2022-01-11)
+
+
+### Bug Fixes
+
+* Minify bootstrap response body ([#23](https://www.github.com/sawadashota/unifi-doorbell-notifier/issues/23)) ([51784f9](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/51784f95dd489da4a8fcd92cc8100fcf63b5d5ab))
+
 ### [0.1.5](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.4...v0.1.5) (2022-01-09)
 
 
