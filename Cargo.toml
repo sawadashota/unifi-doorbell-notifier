@@ -6,6 +6,7 @@ edition = "2021"
 [features]
 
 [dependencies]
+actix-cors = "0.5.4"
 actix-files = "0.5.0"
 actix-web = "3.3.3"
 anyhow = { version = "1.0.52", features = ["backtrace"] }

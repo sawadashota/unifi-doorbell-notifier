@@ -1,1 +1,0 @@
-import{l as o,d as t,_ as e}from"../common/preact.module-df22831c.js";function a(_,n){return o.__a&&o.__a(n),_}typeof window!="undefined"&&window.__PREACT_DEVTOOLS__&&window.__PREACT_DEVTOOLS__.attachPreact("10.6.4",o,{Fragment:t,Component:e});export{a as addHookName};
