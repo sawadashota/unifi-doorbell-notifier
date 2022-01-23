@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.7](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.6...v0.1.7) (2022-01-23)
+
+
+### Bug Fixes
+
+* CORs ([#25](https://www.github.com/sawadashota/unifi-doorbell-notifier/issues/25)) ([2b37494](https://www.github.com/sawadashota/unifi-doorbell-notifier/commit/2b37494b6665ce04f3c2d7c593555b19557abb7b))
+
 ### [0.1.6](https://www.github.com/sawadashota/unifi-doorbell-notifier/compare/v0.1.5...v0.1.6) (2022-01-11)
 
 
