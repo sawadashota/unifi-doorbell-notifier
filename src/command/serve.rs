@@ -3,6 +3,7 @@ use crate::command::config_path;
 use crate::config::Configuration;
 use crate::listener::listen;
 use crate::server::{api, frontend};
+use actix_cors::Cors;
 use actix_web::middleware::{Compress, Logger};
 use actix_web::rt::{spawn, System};
 use actix_web::{web, App, HttpServer};
@@ -48,9 +49,15 @@ impl Cmd {
             let sys = System::new("http-server");
 
             let server = HttpServer::new(move || {
+                let cors = Cors::default()
+                    .allow_any_origin()
+                    .allow_any_header()
+                    .allow_any_method()
+                    .max_age(3600);
                 App::new()
                     .app_data(app_cfg.clone())
                     .app_data(app_client.clone())
+                    .wrap(cors)
                     .wrap(Compress::default())
                     .wrap(Logger::exclude_regex(
                         Logger::default(),

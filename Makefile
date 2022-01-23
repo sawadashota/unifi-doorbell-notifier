@@ -3,13 +3,13 @@ SHELL := /bin/bash
 
 
 NPM := npm
-NPM_PREFIX := frontend
+NPM_PREFIX := ui
 RUST_FRONTEND_STATIC_DIR := src/server/frontend/assets
 
 web-build: ## build web frontend
 	rm -rf $(NPM_PREFIX)/static $(RUST_FRONTEND_STATIC_DIR)
 	$(NPM) run build --prefix $(NPM_PREFIX)
-	cp -r $(NPM_PREFIX)/static $(RUST_FRONTEND_STATIC_DIR)
+	cp -r $(NPM_PREFIX)/dist $(RUST_FRONTEND_STATIC_DIR)
 
 npm-test: ## run npm test
 	$(NPM) run test --prefix $(NPM_PREFIX)

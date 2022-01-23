@@ -1,9 +1,0 @@
-{
-  "imports": {
-    "preact": "./preact.js",
-    "preact-async-route": "./preact-async-route.js",
-    "preact-router": "./preact-router.js",
-    "preact/compat": "./preact/compat.js",
-    "preact/devtools": "./preact/devtools.js"
-  }
-}
